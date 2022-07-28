@@ -4,17 +4,10 @@
   ansible.builtin.set_fact:
     mydistribution: "rhel"
 
-- name: Add signing key
-  ansible.builtin.rpm_key:
-    key: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
-    state: absent
-
 - name: Install Docker
   ansible.builtin.yum:
     name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
+      - docker
     state: latest
     update_cache: true
 
