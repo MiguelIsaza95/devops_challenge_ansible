@@ -9,12 +9,6 @@
     key: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
     state: absent
 
-- name: Add repository into repo.d list
-  ansible.builtin.yum_repository:
-    name: docker
-    description: docker repository
-    baseurl: "https://download.docker.com/linux/{{ mydistribution }}/docker-ce.repo"
-
 - name: Install Docker
   ansible.builtin.yum:
     name:
