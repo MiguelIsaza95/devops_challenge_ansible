@@ -1,0 +1,10 @@
+---
+- name: "Provisioning jenkins server"
+  hosts: localhost
+  become: yes
+  become_user: root
+  become_method: sudo
+  roles:
+          - jenkins
+          - docker
+          - kubernetes

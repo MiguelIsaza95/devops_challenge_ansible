@@ -1,0 +1,22 @@
+---
+# tasks file
+
+- name: kubectl latest version
+  shell: |
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+
+- name: change kubectl permissions
+  file:
+          path: ./kubectl
+          mode: u+x,g+x,o+x
+
+- name: move kubectl executable to bin
+  command:  mv ./kubectl /usr/local/bin/kubectl
+
+- name: check kubectl client version
+  command: kubectl version --client
+  register: kubectl_version
+
+- name: checking kubectl version
+  debug:
+          var: kubectl_version.stdout
