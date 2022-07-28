@@ -14,7 +14,7 @@
   command:  mv ./kubectl /usr/local/bin/kubectl
 
 - name: check kubectl client version
-  command: kubectl version --client
+  ansible.builtin.command: kubectl version --client
   register: kubectl_version
 
 - name: checking kubectl version
