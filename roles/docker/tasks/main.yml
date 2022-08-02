@@ -1,12 +1,40 @@
 ---
 # tasks file
-- name: rhel
-  ansible.builtin.set_fact:
-    mydistribution: "rhel"
-
-- name: Install Docker
-  ansible.builtin.yum:
-    name:
-      - docker
+- name: "Installing Docker Prerequisite packages"
+  yum:
+    name: ['yum-utils', 'device-mapper-persistent-data', 'lvm2']
     state: latest
-    update_cache: true
+
+- name: "Configuring docker-ce repo"
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
+
+- name: " Installing Docker latest version"
+  yum:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    state: present
+
+- name: install docker-compose
+  shell: |
+          curl -L "https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  args:
+    warn: no
+
+- name: add docker-compose permission
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: u+x,g+x,o+x
+
+- name: add user to docker group
+  user:
+    name: "jenkins"
+    group: docker
+    append: true
+
+- name: " Starting and Enabling Docker service"
+  service:
+    name: docker
+    state: started
+    enabled: yes

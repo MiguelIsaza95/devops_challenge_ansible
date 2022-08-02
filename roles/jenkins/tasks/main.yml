@@ -26,11 +26,16 @@
     name: jenkins
     state: latest
 
-- name: daemon-reload to pick up config changes
-  ansible.builtin.systemd:
-    daemon_reload: yes
+- name: ensure jenkins home /var/lib/jenkins exist
+  file:
+          path: /var/lib/jenkins
+          state: directory
+          owner: jenkins
+          group: jenkins
+          mode: u+rwx
+          follow: true
 
-- name: Start jenkins
-  ansible.builtin.systemd:
-    name: jenkins
-    state: started
+- name: restart jenkins
+  service:
+          name: jenkins
+          state: restarted
